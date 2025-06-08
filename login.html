@@ -136,28 +136,36 @@
             const usuario = document.getElementById('usuario').value.trim();
             const contrasena = document.getElementById('contrasena').value.trim();
 
-            if (!usuario || !contrasena) return;
-
-            // Verificar admin
-            const admin = admins.find(a => a.usuario === usuario && a.contrasena === contrasena);
-            if (admin) {
-                localStorage.setItem('sesionIniciada', JSON.stringify({ nombre: admin.nombre, tipo: 'admin' }));
-                mostrarBienvenida(admin.nombre);
-                Swal.fire('Bienvenido administrador', admin.nombre, 'success').then(() => {
-                    location.href = 'index.html';
-                });
+            if (!usuario || !contrasena) {
+                Swal.fire('Campos incompletos', 'Por favor, completa todos los campos', 'warning');
                 return;
             }
 
-            // Verificar usuario registrado
+            // Verificar si es admin
+            const admin = admins.find(a => a.usuario === usuario && a.contrasena === contrasena);
+            if (admin) {
+                localStorage.setItem('sesionIniciada', JSON.stringify({
+                    nombre: admin.nombre,
+                    tipo: 'admin'
+                }));
+                mostrarBienvenida(admin.nombre);
+                Swal.fire('Bienvenido administrador', admin.nombre, 'success')
+                    .then(() => location.href = 'index.html');
+                return;
+            }
+
+            // Verificar si es usuario registrado
             const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
             const user = usuarios.find(u => u.usuario === usuario && u.contrasena === contrasena);
             if (user) {
-                localStorage.setItem('sesionIniciada', JSON.stringify({ nombre: user.nombre, tipo: 'usuario' }));
+                localStorage.setItem('sesionIniciada', JSON.stringify({
+                    nombre: user.nombre,
+                    email: user.email,
+                    tipo: 'usuario'
+                }));
                 mostrarBienvenida(user.nombre);
-                Swal.fire('Bienvenido', user.nombre, 'success').then(() => {
-                    location.href = 'index.html';
-                });
+                Swal.fire('Bienvenido', user.nombre, 'success')
+                    .then(() => location.href = 'index.html');
             } else {
                 Swal.fire('Error', 'Credenciales incorrectas', 'error');
             }
@@ -171,6 +179,7 @@
             }
         }
     </script>
+
 
 
 

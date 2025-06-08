@@ -8,32 +8,31 @@ document.addEventListener("DOMContentLoaded", function () {
         const loginLink = nav?.querySelector('a[href="login.html"]');
         if (loginLink) loginLink.parentElement.remove();
 
-        // Agregar "Cerrar sesión" si no existe ya
+        // Mostrar bienvenida
+        if (bienvenida) {
+            bienvenida.textContent = `¡Hola, ${sesion.nombre}!`;
+            bienvenida.classList.remove("d-none");
+        }
+
+        // Agregar "Mis Citas" solo si es usuario (no admin)
+        if (sesion.tipo === "usuario" && !document.getElementById("misCitasLink")) {
+            const misCitasLi = document.createElement("li");
+            misCitasLi.className = "nav-item";
+            misCitasLi.innerHTML = `<a class="nav-link text-info" id="misCitasLink" href="miscitas.html">Mis Citas</a>`;
+            nav?.appendChild(misCitasLi);
+        }
+
+        // Agregar "Cerrar sesión" si no existe
         if (!document.getElementById('cerrarSesion')) {
             const logoutLi = document.createElement("li");
             logoutLi.className = "nav-item";
             logoutLi.innerHTML = `<a class="nav-link text-danger" href="#" id="cerrarSesion">Cerrar Sesión</a>`;
             nav?.appendChild(logoutLi);
 
-            // Evento de cerrar sesión
             document.getElementById("cerrarSesion").addEventListener("click", () => {
                 localStorage.removeItem("sesionIniciada");
                 location.href = "index.html";
             });
-        }
-
-        // Agregar enlace "Ver Citas" si es admin
-        if (sesion.tipo === "admin" && !document.getElementById('verCitasAdmin')) {
-            const adminLi = document.createElement("li");
-            adminLi.className = "nav-item";
-            adminLi.innerHTML = `<a class="nav-link text-success" href="admin-citas.html" id="verCitasAdmin">Ver Citas</a>`;
-            nav?.appendChild(adminLi);
-        }
-
-        // Mostrar bienvenida
-        if (bienvenida) {
-            bienvenida.textContent = `¡Hola, ${sesion.nombre}!`;
-            bienvenida.classList.remove("d-none");
         }
     }
 });

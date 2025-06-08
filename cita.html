@@ -157,7 +157,6 @@
 
 
     <script>
-        // Capturar servicio desde URL y seleccionar automáticamente
         function actualizarPrecio(servicioSeleccionado) {
             const servicio = servicioSeleccionado.toLowerCase();
             const precioInput = document.getElementById("precio");
@@ -179,11 +178,12 @@
         }
 
         document.addEventListener("DOMContentLoaded", () => {
+            const sesion = JSON.parse(localStorage.getItem("sesionIniciada"));
             const params = new URLSearchParams(window.location.search);
             const servicioURL = params.get("servicio");
             const select = document.getElementById("servicio");
 
-            // Seleccionar automáticamente si viene desde la URL
+            // Auto-seleccionar servicio desde la URL
             if (servicioURL && select) {
                 for (let i = 0; i < select.options.length; i++) {
                     if (select.options[i].value === servicioURL) {
@@ -191,21 +191,32 @@
                         break;
                     }
                 }
-
-                // 👉 Actualizar el precio también si vino desde la URL
                 actualizarPrecio(select.value);
+            }
+
+            // Si está logueado un usuario, rellenar su email automáticamente
+            if (sesion?.tipo === "usuario") {
+                const emailInput = document.getElementById("email");
+                emailInput.value = sesion.email;
+                emailInput.disabled = true; // Deshabilitar edición
             }
         });
 
-
-        // Guardar cita con validaciones y SweetAlert2
         document.getElementById("btn-agendar").addEventListener("click", function () {
             const nombre = document.getElementById("name").value.trim();
-            const email = document.getElementById("email").value.trim();
             const telefono = document.getElementById("phone").value.trim();
             const fecha = document.getElementById("date").value;
             const mensaje = document.getElementById("message").value.trim();
             const servicio = document.getElementById("servicio").value;
+            const sesion = JSON.parse(localStorage.getItem("sesionIniciada"));
+
+            // Obtener email dependiendo de si está logueado
+            let email = "";
+            if (sesion?.tipo === "usuario") {
+                email = sesion.email;
+            } else {
+                email = document.getElementById("email").value.trim();
+            }
 
             if (!nombre || !email || !fecha || !servicio) {
                 Swal.fire({
@@ -216,7 +227,15 @@
                 return;
             }
 
-            const nuevaCita = { nombre, email, telefono, fecha, mensaje, servicio };
+            const nuevaCita = {
+                nombre,
+                email,
+                telefono,
+                fecha,
+                mensaje,
+                servicio
+            };
+
             const citasGuardadas = JSON.parse(localStorage.getItem("citasAgendadas")) || [];
             citasGuardadas.push(nuevaCita);
             localStorage.setItem("citasAgendadas", JSON.stringify(citasGuardadas));
@@ -228,14 +247,19 @@
             });
 
             document.getElementById("form-cita").reset();
+
+            // Restaurar el email si fue autocompletado por la sesión
+            if (sesion?.tipo === "usuario") {
+                document.getElementById("email").value = sesion.email;
+            }
         });
 
-        // Mostrar precio al seleccionar servicio
+        // Precio dinámico al cambiar el servicio
         document.getElementById("servicio").addEventListener("change", function () {
             actualizarPrecio(this.value);
         });
-
     </script>
+
 
 
 
