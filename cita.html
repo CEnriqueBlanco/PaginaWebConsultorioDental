@@ -89,6 +89,12 @@
                                             <option value="Prótesis Dentales">Prótesis Dentales</option>
                                         </select>
                                     </div>
+                                    <div class="col-lg-6 col-12">
+                                        <label class="form-label"></label>
+                                        <input type="text" id="precio" class="form-control" placeholder="Precio"
+                                            readonly>
+
+                                    </div>
 
                                     <div class="col-12">
                                         <textarea class="form-control" rows="5" id="message" name="message"
@@ -152,22 +158,45 @@
 
     <script>
         // Capturar servicio desde URL y seleccionar automáticamente
+        function actualizarPrecio(servicioSeleccionado) {
+            const servicio = servicioSeleccionado.toLowerCase();
+            const precioInput = document.getElementById("precio");
+
+            const preciosServicios = {
+                "limpieza dental": 500,
+                "blanqueamiento": 1200,
+                "ortodoncia": 6000,
+                "extracción dental": 800,
+                "resinas estéticas": 650,
+                "prótesis dentales": 3500
+            };
+
+            if (preciosServicios[servicio]) {
+                precioInput.value = "$" + preciosServicios[servicio].toLocaleString();
+            } else {
+                precioInput.value = "";
+            }
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
             const params = new URLSearchParams(window.location.search);
-            const servicio = params.get("servicio");
+            const servicioURL = params.get("servicio");
+            const select = document.getElementById("servicio");
 
-            if (servicio) {
-                const select = document.getElementById("servicio");
-                if (select) {
-                    for (let i = 0; i < select.options.length; i++) {
-                        if (select.options[i].value === servicio) {
-                            select.selectedIndex = i;
-                            break;
-                        }
+            // Seleccionar automáticamente si viene desde la URL
+            if (servicioURL && select) {
+                for (let i = 0; i < select.options.length; i++) {
+                    if (select.options[i].value === servicioURL) {
+                        select.selectedIndex = i;
+                        break;
                     }
                 }
+
+                // 👉 Actualizar el precio también si vino desde la URL
+                actualizarPrecio(select.value);
             }
         });
+
 
         // Guardar cita con validaciones y SweetAlert2
         document.getElementById("btn-agendar").addEventListener("click", function () {
@@ -200,6 +229,12 @@
 
             document.getElementById("form-cita").reset();
         });
+
+        // Mostrar precio al seleccionar servicio
+        document.getElementById("servicio").addEventListener("change", function () {
+            actualizarPrecio(this.value);
+        });
+
     </script>
 
 
