@@ -10,36 +10,36 @@ https://templatemo.com/tm-566-medic-care
   CUSTOM PROPERTIES ( VARIABLES )             
 -----------------------------------------*/
 :root {
-  --white-color:                  #FFFFFF;
-  --primary-color:                #247cff;
-  --section-bg-color:             #F9F9F9;
-  --dark-color:                   #000000;
-  --title-color:                  #565758;
-  --p-color:                      #717275;
-  --border-color:                 #eaeaea;
+  --white-color: #FFFFFF;
+  --primary-color: #247cff;
+  --section-bg-color: #F9F9F9;
+  --dark-color: #000000;
+  --title-color: #565758;
+  --p-color: #717275;
+  --border-color: #eaeaea;
 
-  --body-font-family:             'Open Sans', sans-serif;
+  --body-font-family: 'Open Sans', sans-serif;
 
-  --h1-font-size:                 48px;
-  --h2-font-size:                 36px;
-  --h3-font-size:                 32px;
-  --h4-font-size:                 28px;
-  --h5-font-size:                 24px;
-  --h6-font-size:                 22px;
-  --p-font-size:                  18px;
-  --menu-font-size:               16px;
+  --h1-font-size: 48px;
+  --h2-font-size: 36px;
+  --h3-font-size: 32px;
+  --h4-font-size: 28px;
+  --h5-font-size: 24px;
+  --h6-font-size: 22px;
+  --p-font-size: 18px;
+  --menu-font-size: 16px;
 
-  --font-weight-light:            300;
-  --font-weight-normal:           400;
-  --font-weight-semibold:         600;
-  --font-weight-bold:             700;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
 }
 
 body {
-    background: var(--white-color);
-    font-family: var(--body-font-family);    
-    position: relative;
-    padding-top: 94px;
+  background: var(--white-color);
+  font-family: var(--body-font-family);
+  position: relative;
+  padding-top: 94px;
 }
 
 /*---------------------------------------
@@ -101,7 +101,7 @@ p {
   letter-spacing: 0.5px;
 }
 
-a, 
+a,
 button {
   touch-action: manipulation;
   transition: all 0.3s;
@@ -137,9 +137,9 @@ a:hover {
   box-sizing: border-box;
   margin: 0;
   -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   overflow: hidden;
   border-radius: 0;
   text-transform: uppercase;
@@ -227,25 +227,31 @@ strong {
   0% {
     opacity: 0;
   }
+
   5% {
     opacity: 0;
     transform: translateY(5px);
   }
+
   10% {
     opacity: 1;
     transform: translateY(0px);
   }
+
   25% {
     opacity: 1;
     transform: translateY(0px);
   }
+
   30% {
     opacity: 0;
     transform: translateY(5px);
   }
+
   80% {
     opacity: 0;
   }
+
   100% {
     opacity: 0;
   }
@@ -254,7 +260,7 @@ strong {
 /*---------------------------------------
   HERO              
 -----------------------------------------*/
-.hero {  
+.hero {
   padding-top: 0rem;
 }
 
@@ -340,8 +346,8 @@ strong {
   padding-bottom: 15px;
 }
 
-.navbar-nav .nav-item.active .nav-link, 
-.nav-link:focus, 
+.navbar-nav .nav-item.active .nav-link,
+.nav-link:focus,
 .nav-link:hover {
   color: var(--dark-color);
 }
@@ -428,10 +434,10 @@ strong {
   flex-direction: row-reverse;
 }
 
-.timeline h3, 
+.timeline h3,
 .timeline p {
   padding: 10px 30px;
-} 
+}
 
 .timeline h3 {
   background: var(--dark-color);
@@ -464,7 +470,7 @@ strong {
 .timeline-nodes:nth-child(odd) .timeline-date {
   text-align: left;
 }
- 
+
 .timeline-nodes:nth-child(even) .timeline-date {
   text-align: right;
 }
@@ -512,9 +518,9 @@ strong {
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translate(-50%,0);
+  transform: translate(-50%, 0);
   background: var(--white-color);
-  box-shadow: 0 1rem 3rem rgba(0,0,0,.175);
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175);
   z-index: 1;
 }
 
@@ -529,6 +535,7 @@ strong {
 }
 
 @media (max-width: 767px) {
+
   .timeline-nodes:nth-child(odd) h3,
   .timeline-nodes:nth-child(odd) p {
     text-align: left;
@@ -913,4 +920,57 @@ strong {
   .timeline::before {
     left: 42px;
   }
+}
+
+.reviews-carousel .item {
+  max-width: 320px;
+  margin: auto;
+  padding: 30px 20px;
+  font-size: 0.95rem;
+  min-height: 300px;
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.reviews-carousel .item:hover {
+  transform: translateY(-5px);
+}
+
+.reviews-carousel img {
+  width: 90px;
+  height: 230px;
+  object-fit: cover;
+  border-radius: 70%;
+  border: 4px solid #e0f0ff;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+  margin: 0 auto 15px auto;
+  display: block;
+}
+
+.reviews-carousel h5 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #222;
+}
+
+.reviews-carousel .stars {
+  color: #fbc02d;
+  margin-bottom: 10px;
+}
+
+.reviews-carousel p {
+  margin-bottom: 0;
+  line-height: 1.5;
+  font-style: italic;
+  color: #555;
+}
+
+#reviews.section-padding {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #f9fbfc;
 }
