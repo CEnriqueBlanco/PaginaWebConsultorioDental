@@ -79,6 +79,9 @@
                                         <input type="date" name="date" id="date" class="form-control">
                                     </div>
                                     <div class="col-lg-6 col-12">
+                                        <input type="time" name="time" id="time" class="form-control" required>
+                                    </div>
+                                    <div class="col-lg-6 col-12">
                                         <select id="servicio" class="form-control" required>
                                             <option value="">Seleccione un servicio</option>
                                             <option value="Limpieza Dental">Limpieza Dental</option>
@@ -93,9 +96,7 @@
                                         <label class="form-label"></label>
                                         <input type="text" id="precio" class="form-control" placeholder="Precio"
                                             readonly>
-
                                     </div>
-
                                     <div class="col-12">
                                         <textarea class="form-control" rows="5" id="message" name="message"
                                             placeholder="Mensaje adicional"></textarea>
@@ -178,6 +179,28 @@
             }
         }
 
+        const horariosServicios = {
+            "Limpieza Dental": [
+                { dias: [1, 2, 3, 4, 5], inicio: "09:00", fin: "18:00" }
+            ],
+            "Blanqueamiento": [
+                { dias: [1, 2, 3, 4, 5, 6], inicio: "10:00", fin: "17:00" }
+            ],
+            "Ortodoncia": [
+                { dias: [1, 2, 3, 4, 5], inicio: "11:00", fin: "19:00" }
+            ],
+            "Extracción Dental": [
+                { dias: [6], inicio: "10:00", fin: "14:00" }
+            ],
+            "Resinas Estéticas": [
+                { dias: [1, 2, 3, 4, 5], inicio: "09:00", fin: "16:00" }
+            ],
+            "Prótesis Dentales": [
+                { dias: [1, 2, 3, 4, 5], inicio: "12:00", fin: "18:00" }
+            ]
+        };
+
+        
         document.addEventListener("DOMContentLoaded", () => {
             const params = new URLSearchParams(window.location.search);
             const servicioURL = params.get("servicio");
@@ -194,6 +217,9 @@
 
                 // 👉 Actualizar el precio también si vino desde la URL
                 actualizarPrecio(select.value);
+                // Actualizar horas si hay fecha seleccionada
+                const fecha = document.getElementById("date").value;
+                actualizarHoras(select.value, fecha);
             }
         });
 
@@ -206,8 +232,9 @@
             const fecha = document.getElementById("date").value;
             const mensaje = document.getElementById("message").value.trim();
             const servicio = document.getElementById("servicio").value;
+            const hora = document.getElementById("time").value;
 
-            if (!nombre || !email || !fecha || !servicio) {
+            if (!nombre || !email || !fecha || !servicio || !hora) {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Campos incompletos',
@@ -216,7 +243,54 @@
                 return;
             }
 
-            const nuevaCita = { nombre, email, telefono, fecha, mensaje, servicio };
+            // Validar hora dentro del rango permitido
+            const horarios = horariosServicios[servicio];
+            if (!horarios) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Servicio inválido',
+                    text: 'El servicio seleccionado no tiene horarios asignados.'
+                });
+                return;
+            }
+
+            const fechaObj = new Date(fecha + "T00:00:00");
+            const dia = fechaObj.getDay();
+
+            // Filtrar horarios válidos para el día
+            const horariosValidos = horarios.filter(h => h.dias.includes(dia));
+            if (horariosValidos.length === 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Día sin horario',
+                    text: 'El servicio no está disponible ese día.'
+                });
+                return;
+            }
+
+            const horario = horariosValidos[0]; // Solo consideramos el primero
+            const horaSeleccionada = hora.split(':').map(Number);
+            const horaInicio = horario.inicio.split(':').map(Number);
+            const horaFin = horario.fin.split(':').map(Number);
+
+            function esHoraValida(horaSel, inicio, fin) {
+                const selMinutos = horaSel[0] * 60 + horaSel[1];
+                const inicioMinutos = inicio[0] * 60 + inicio[1];
+                const finMinutos = fin[0] * 60 + fin[1];
+                return selMinutos >= inicioMinutos && selMinutos < finMinutos;
+            }
+
+            if (!esHoraValida(horaSeleccionada, horaInicio, horaFin)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Hora no válida',
+                    text: `La hora seleccionada (${hora}) está fuera del horario permitido (${horario.inicio} - ${horario.fin}).`
+                });
+                return;
+            }
+
+            // Si pasa todas las validaciones, guardar cita
+            const nuevaCita = { nombre, email, telefono, fecha, hora, mensaje, servicio };
             const citasGuardadas = JSON.parse(localStorage.getItem("citasAgendadas")) || [];
             citasGuardadas.push(nuevaCita);
             localStorage.setItem("citasAgendadas", JSON.stringify(citasGuardadas));
@@ -230,10 +304,12 @@
             document.getElementById("form-cita").reset();
         });
 
+
         // Mostrar precio al seleccionar servicio
         document.getElementById("servicio").addEventListener("change", function () {
             actualizarPrecio(this.value);
         });
+
 
     </script>
 
