@@ -24,6 +24,7 @@
 <body id="top">
 
     <main>
+        <!-- ... otras secciones ... -->
         <nav class="navbar navbar-expand-lg bg-light fixed-top shadow-lg">
             <div class="container">
                 <a class="navbar-brand mx-auto d-lg-none" href="index.html">
@@ -40,6 +41,7 @@
                         <li class="nav-item active"><a class="nav-link" href="index.html#hero">Inicio</a></li>
                         <li class="nav-item"><a class="nav-link" href="index.html#about">Sobre Nosotros</a></li>
                         <li class="nav-item"><a class="nav-link" href="servicios.html">Servicios</a></li>
+
                         <a class="navbar-brand d-none d-lg-block" href="index.html">
                             Sonrisa Perfecta
                             <strong class="d-block">Consultorio Dental</strong>
@@ -48,84 +50,39 @@
                         <li class="nav-item"><a class="nav-link" href="cita.html">Agendar</a></li>
                         <li class="nav-item"><a class="nav-link" href="#contact">Contacto</a></li>
                         <li class="nav-item"><a class="nav-link" href="login.html">Iniciar Sesión</a></li>
-                    </ul>
 
-                    <span id="bienvenida" class="ms-auto text-primary fw-bold d-none"></span>
+
+                    </ul>
                 </div>
             </div>
         </nav>
 
-        <section class="hero" id="hero">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div id="myCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <img src="images/slider/portrait-successful-mid-adult-doctor-with-crossed-arms.jpg"
-                                        class="img-fluid" alt="">
-                                </div>
-                                <div class="carousel-item">
-                                    <img src="images/slider/young-asian-female-dentist-white-coat-posing-clinic-equipment.jpg"
-                                        class="img-fluid" alt="">
-                                </div>
-                                <div class="carousel-item">
-                                    <img src="images/slider/doctor-s-hand-holding-stethoscope-closeup.jpg"
-                                        class="img-fluid" alt="">
-                                </div>
-                            </div>
+        <div class="container mt-5 pt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <h3 class="text-center mb-4">Iniciar Sesión</h3>
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="usuario" class="form-label">Usuario</label>
+                            <input type="text" class="form-control" id="usuario" required>
                         </div>
-
-                        <div class="heroText d-flex flex-column justify-content-center">
-                            <h1 class="mt-auto mb-2">
-                                Cuidamos tu
-                                <div class="animated-info">
-                                    <span class="animated-item">sonrisa</span>
-                                    <span class="animated-item">bienestar</span>
-                                    <span class="animated-item">salud dental</span>
-                                </div>
-                            </h1>
-
-                            <p class="mb-4">Consultorio Dental Sonrisa Perfecta - atención profesional, citas online y
-                                expedientes digitales.</p>
-
-                            <div class="heroLinks d-flex flex-wrap align-items-center">
-                                <a class="custom-link me-4" href="#about" data-hover="Saber más">Saber más</a>
-                                <a class="custom-link me-4" href="https://wa.me/5210000000000" target="_blank"><i
-                                        class="bi-whatsapp"></i> WhatsApp</a>
-                                <p class="contact-phone mb-0"><i class="bi-phone"></i> 449-000-0000</p>
-                            </div>
+                        <div class="mb-3">
+                            <label for="contrasena" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="contrasena" required>
                         </div>
+                        <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+                    </form>
+                    <div class="mt-3 text-center">
+                        ¿No tienes cuenta? <a href="registro.html">Regístrate ahora</a>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <section class="section-padding" id="about">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-12">
-                        <h2 class="mb-lg-3 mb-3">Conoce al Dr. Javier Morales</h2>
-                        <p>Fundador de Sonrisa Perfecta, especializado en atención dental integral. Nuestro objetivo es
-                            ofrecerte una experiencia cómoda, moderna y profesional desde tu primera cita.</p>
-                        <p>Digitalizamos tus expedientes, gestionamos tus citas y enviamos recordatorios automáticos.
-                            Todo desde una sola plataforma.</p>
-                    </div>
-                    <div class="col-lg-4 col-md-5 col-12 mx-auto">
-                        <div
-                            class="featured-circle bg-white shadow-lg d-flex justify-content-center align-items-center">
-                            <p class="featured-text"><span class="featured-number">12</span> Años<br>de experiencia</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Secciones adicionales (servicios, testimonios, formulario de citas, contacto, etc.) se mantienen con textos actualizados y enfoque en odontología -->
 
     </main>
 
-    <footer class="site-footer section-padding" id="contact">
+    <footer class="site-footer section-padding mt-5" id="contact">
         <div class="container">
             <div class="row">
                 <div class="col-lg-5 me-auto col-12">
@@ -136,13 +93,11 @@
                         <li class="list-group-item d-flex">Sábado<span> 10:00 AM - 2:00 PM</span></li>
                     </ul>
                 </div>
-
                 <div class="col-lg-2 col-md-6 col-12 my-4 my-lg-0">
                     <h5 class="mb-lg-4 mb-3">Ubicación</h5>
                     <p>Av. Salud Dental #123, Aguascalientes, México</p>
                     <p><a href="mailto:sonrisa@consultorio.com">sonrisa@consultorio.com</a></p>
                 </div>
-
                 <div class="col-lg-3 col-md-6 col-12 ms-auto">
                     <h5 class="mb-lg-4 mb-3">Redes Sociales</h5>
                     <ul class="social-icon">
@@ -151,7 +106,6 @@
                         <li><a href="#" class="social-icon-link bi-whatsapp"></a></li>
                     </ul>
                 </div>
-
                 <div class="col-lg-3 col-12 ms-auto mt-4 mt-lg-0">
                     <p class="copyright-text">&copy; 2025 Consultorio Sonrisa Perfecta<br>Diseñado por el equipo de
                         Sistemas Computacionales 6°A</p>
@@ -161,12 +115,64 @@
     </footer>
 
     <!-- JS -->
-    <script src="js/sesion.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/scrollspy.min.js"></script>
     <script src="js/custom.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const admins = [
+            { nombre: 'Dr. Luis', usuario: 'admin1', contrasena: '1234' },
+            { nombre: 'Dra. Ana', usuario: 'admin2', contrasena: 'abcd' },
+            { nombre: 'Dra. Sofía', usuario: 'admin3', contrasena: 'dentista' }
+        ];
+
+        const loginForm = document.getElementById('loginForm');
+        const bienvenida = document.getElementById('bienvenida');
+
+        loginForm?.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const usuario = document.getElementById('usuario').value.trim();
+            const contrasena = document.getElementById('contrasena').value.trim();
+
+            if (!usuario || !contrasena) return;
+
+            // Verificar admin
+            const admin = admins.find(a => a.usuario === usuario && a.contrasena === contrasena);
+            if (admin) {
+                localStorage.setItem('sesionIniciada', JSON.stringify({ nombre: admin.nombre, tipo: 'admin' }));
+                mostrarBienvenida(admin.nombre);
+                Swal.fire('Bienvenido administrador', admin.nombre, 'success').then(() => {
+                    location.href = 'index.html';
+                });
+                return;
+            }
+
+            // Verificar usuario registrado
+            const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+            const user = usuarios.find(u => u.usuario === usuario && u.contrasena === contrasena);
+            if (user) {
+                localStorage.setItem('sesionIniciada', JSON.stringify({ nombre: user.nombre, tipo: 'usuario' }));
+                mostrarBienvenida(user.nombre);
+                Swal.fire('Bienvenido', user.nombre, 'success').then(() => {
+                    location.href = 'index.html';
+                });
+            } else {
+                Swal.fire('Error', 'Credenciales incorrectas', 'error');
+            }
+        });
+
+        function mostrarBienvenida(nombre) {
+            const etiqueta = document.getElementById('bienvenida');
+            if (etiqueta) {
+                etiqueta.textContent = `¡Bienvenido, ${nombre}!`;
+                etiqueta.classList.remove('d-none');
+            }
+        }
+    </script>
+
+
 
 
 </body>
