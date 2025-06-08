@@ -75,6 +75,27 @@
             </div>
         </div>
 
+        <div class="container mt-5">
+            <h2 class="text-center mb-4">Expedientes clínicos</h2>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-info">
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Edad</th>
+                            <th>Diagnóstico</th>
+                            <th>Tratamiento</th>
+                            <th>Fecha última visita</th>
+                            <th>Generar Expediente</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-expedientes"></tbody>
+                </table>
+            </div>
+        </div>
+
 
     </main>
 
@@ -119,6 +140,8 @@
     <script src="js/custom.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://kit.fontawesome.com/b1bfd4ff0a.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 
 
     <script>
@@ -241,6 +264,126 @@
 
 
         document.addEventListener("DOMContentLoaded", cargarCitas);
+
+        const expedientesFicticios = [
+  {
+    nombre: "Andrea López",
+    edad: 28,
+    diagnostico: "La paciente presenta caries avanzada en el segundo molar inferior derecho, con presencia de sensibilidad extrema al frío, dolor intermitente y evidencia radiográfica de compromiso pulpar. Se observa inflamación leve de la encía adyacente.",
+    tratamiento: "Se realizó tratamiento de endodoncia completo con irrigación, obturación de conductos y control radiográfico. Posteriormente se colocó resina compuesta estética tipo nanohíbrida. Se indicó seguimiento en 3 meses, uso de pasta desensibilizante y reducción del consumo de azúcares.",
+    fecha: "2024-11-05"
+  },
+  {
+    nombre: "Carlos Méndez",
+    edad: 35,
+    diagnostico: "Paciente con historial de bruxismo nocturno severo, desgaste dental generalizado, sensibilidad en piezas posteriores y cefaleas matutinas. Evaluación clínica revela hipertrofia de músculos maseteros y signos de estrés articular.",
+    tratamiento: "Se confeccionó férula de descarga rígida superior con ajuste oclusal individualizado. Se recomendó fisioterapia mandibular, ejercicios de relajación y seguimiento trimestral para control del desgaste y evaluación del patrón de bruxismo.",
+    fecha: "2025-01-22"
+  },
+  {
+    nombre: "Lucía Ramírez",
+    edad: 42,
+    diagnostico: "Pérdida dental múltiple en arcada superior e inferior debido a enfermedad periodontal crónica. Presenta dificultad masticatoria, reabsorción ósea moderada y alteración en la pronunciación de fonemas.",
+    tratamiento: "Se diseñó y colocó prótesis removible bilateral de base acrílica con retención metálica. Instrucciones detalladas de uso, limpieza diaria y controles periódicos. Se estableció plan de mantenimiento periodontal trimestral.",
+    fecha: "2025-03-10"
+  },
+  {
+    nombre: "Javier Torres",
+    edad: 31,
+    diagnostico: "Encías inflamadas con sangrado al sondaje, presencia de cálculo supragingival en región posterior, halitosis ocasional y bolsas periodontales de 3 a 4 mm. Diagnóstico: gingivitis generalizada.",
+    tratamiento: "Se realizó profilaxis completa con ultrasonido y alisado radicular selectivo. Se indicó clorhexidina 0.12% por 10 días, cepillo dental ultrasuave y revisión en un mes para reevaluación periodontal.",
+    fecha: "2025-04-18"
+  },
+  {
+    nombre: "Mónica Herrera",
+    edad: 24,
+    diagnostico: "Paciente refiere preocupación estética por apiñamiento moderado en el sector anterior inferior. Se observa desalineación sin alteración funcional ni problemas articulares. Buen estado general de salud bucodental.",
+    tratamiento: "Se inició tratamiento ortodóncico con alineadores transparentes (sistema tipo Invisalign). Se realizaron escaneos digitales, planificación virtual del tratamiento y entrega de primeras férulas con controles cada 4 semanas.",
+    fecha: "2025-05-02"
+  }
+];
+
+
+
+        function cargarExpedientes() {
+            const tabla = document.getElementById("tabla-expedientes");
+            expedientesFicticios.forEach(exp => {
+                const fila = document.createElement("tr");
+                fila.innerHTML = `
+        <td>${exp.nombre}</td>
+        <td>${exp.edad}</td>
+        <td>${exp.diagnostico}</td>
+        <td>${exp.tratamiento}</td>
+        <td>${exp.fecha}</td>
+          <td><button class="btn btn-sm btn-outline-danger" onclick='generarPDF(${JSON.stringify(exp)})'>
+    <i class="bi bi-file-earmark-pdf"></i> PDF
+  </button></td>
+      `;
+                tabla.appendChild(fila);
+            });
+        }
+        async function generarPDF(exp) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  const logo = new Image();
+  logo.src = 'images/gallery/logo.png'; // Asegúrate de que existe
+
+  await new Promise((res, rej) => {
+    logo.onload = res;
+    logo.onerror = rej;
+  });
+
+  // Logo
+  doc.addImage(logo, 'PNG', 80, 10, 50, 50);
+
+  // Encabezado
+  doc.setFillColor(240, 240, 240); // Gris claro
+  doc.rect(10, 65, 190, 12, 'F'); // Rectángulo fondo encabezado
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('EXPEDIENTE CLÍNICO', 105, 73, null, null, 'center');
+
+  // Datos personales
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`Nombre:`, 10, 90);
+  doc.text(exp.nombre, 40, 90);
+  doc.text(`Edad:`, 10, 100);
+  doc.text(`${exp.edad} años`, 40, 100);
+  doc.text(`Fecha última visita:`, 10, 110);
+  doc.text(exp.fecha, 60, 110);
+
+  // Diagnóstico
+  doc.setDrawColor(200);
+  doc.setLineWidth(0.5);
+  doc.rect(10, 120, 190, 30);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Diagnóstico:', 12, 128);
+  doc.setFont('helvetica', 'normal');
+  doc.text(doc.splitTextToSize(exp.diagnostico, 180), 12, 134);
+
+  // Tratamiento
+  doc.rect(10, 160, 190, 30);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Tratamiento:', 12, 168);
+  doc.setFont('helvetica', 'normal');
+  doc.text(doc.splitTextToSize(exp.tratamiento, 180), 12, 174);
+
+  // Firma y nota legal
+  doc.setFontSize(10);
+  doc.line(120, 250, 200, 250);
+  doc.text('Dr. Javier Morales', 150, 255, null, null, 'center');
+  doc.text('Céd. Prof. 12345678', 150, 260, null, null, 'center');
+
+  doc.setFontSize(8);
+  doc.setTextColor(100);
+  doc.text('Este documento es confidencial y forma parte del historial clínico.', 10, 285);
+
+  doc.save(`Expediente_${exp.nombre.replaceAll(' ', '_')}.pdf`);
+}
+
+        document.addEventListener("DOMContentLoaded", cargarExpedientes);
     </script>
 
 
