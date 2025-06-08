@@ -78,6 +78,18 @@
                                     <div class="col-lg-6 col-12">
                                         <input type="date" name="date" id="date" class="form-control">
                                     </div>
+                                    <div class="col-lg-6 col-12">
+                                        <select id="servicio" class="form-control" required>
+                                            <option value="">Seleccione un servicio</option>
+                                            <option value="Limpieza Dental">Limpieza Dental</option>
+                                            <option value="Blanqueamiento">Blanqueamiento</option>
+                                            <option value="Ortodoncia">Ortodoncia</option>
+                                            <option value="Extracción Dental">Extracción Dental</option>
+                                            <option value="Resinas Estéticas">Resinas Estéticas</option>
+                                            <option value="Prótesis Dentales">Prótesis Dentales</option>
+                                        </select>
+                                    </div>
+
                                     <div class="col-12">
                                         <textarea class="form-control" rows="5" id="message" name="message"
                                             placeholder="Mensaje adicional"></textarea>
@@ -134,31 +146,63 @@
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/scrollspy.min.js"></script>
     <script src="js/custom.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Script para guardar citas en localStorage -->
+
+
     <script>
+        // Capturar servicio desde URL y seleccionar automáticamente
+        document.addEventListener("DOMContentLoaded", () => {
+            const params = new URLSearchParams(window.location.search);
+            const servicio = params.get("servicio");
+
+            if (servicio) {
+                const select = document.getElementById("servicio");
+                if (select) {
+                    for (let i = 0; i < select.options.length; i++) {
+                        if (select.options[i].value === servicio) {
+                            select.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
+        // Guardar cita con validaciones y SweetAlert2
         document.getElementById("btn-agendar").addEventListener("click", function () {
             const nombre = document.getElementById("name").value.trim();
             const email = document.getElementById("email").value.trim();
             const telefono = document.getElementById("phone").value.trim();
             const fecha = document.getElementById("date").value;
             const mensaje = document.getElementById("message").value.trim();
+            const servicio = document.getElementById("servicio").value;
 
-            if (!nombre || !email || !fecha) {
-                alert("Por favor completa los campos obligatorios.");
+            if (!nombre || !email || !fecha || !servicio) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campos incompletos',
+                    text: 'Por favor completa los campos obligatorios (nombre, email, fecha y servicio).'
+                });
                 return;
             }
 
-            const nuevaCita = { nombre, email, telefono, fecha, mensaje };
+            const nuevaCita = { nombre, email, telefono, fecha, mensaje, servicio };
             const citasGuardadas = JSON.parse(localStorage.getItem("citasAgendadas")) || [];
             citasGuardadas.push(nuevaCita);
             localStorage.setItem("citasAgendadas", JSON.stringify(citasGuardadas));
 
-            alert("✅ Tu cita ha sido registrada correctamente.");
+            Swal.fire({
+                icon: 'success',
+                title: '¡Cita agendada!',
+                text: 'Tu cita ha sido registrada correctamente.'
+            });
 
             document.getElementById("form-cita").reset();
         });
     </script>
+
+
 
 </body>
 

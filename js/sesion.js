@@ -22,6 +22,14 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
 
+        // Agregar enlace "Ver Citas" si es admin
+        if (sesion.tipo === "admin" && !document.getElementById('verCitasAdmin')) {
+            const adminLi = document.createElement("li");
+            adminLi.className = "nav-item";
+            adminLi.innerHTML = `<a class="nav-link text-success" href="admin-citas.html" id="verCitasAdmin">Ver Citas</a>`;
+            nav?.appendChild(adminLi);
+        }
+
         // Mostrar bienvenida
         if (bienvenida) {
             bienvenida.textContent = `¡Hola, ${sesion.nombre}!`;
