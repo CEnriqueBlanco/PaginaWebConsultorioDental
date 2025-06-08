@@ -302,14 +302,7 @@
 
             // Si pasa todas las validaciones, guardar cita
             const nuevaCita = { nombre, email, telefono, fecha, hora, mensaje, servicio };
-            const nuevaCita = {
-                nombre,
-                email,
-                telefono,
-                fecha,
-                mensaje,
-                servicio
-            };
+            
 
             const citasGuardadas = JSON.parse(localStorage.getItem("citasAgendadas")) || [];
             citasGuardadas.push(nuevaCita);
