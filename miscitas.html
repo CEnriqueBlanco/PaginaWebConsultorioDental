@@ -19,6 +19,8 @@
     <link href="css/owl.carousel.min.css" rel="stylesheet">
     <link href="css/owl.theme.default.min.css" rel="stylesheet">
     <link href="css/templatemo-medic-care.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+
 </head>
 
 <body id="top">
@@ -102,6 +104,7 @@
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/scrollspy.min.js"></script>
     <script src="js/custom.js"></script>
+    <script src="js/nav.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://kit.fontawesome.com/b1bfd4ff0a.js" crossorigin="anonymous"></script>
     <script>
@@ -153,12 +156,45 @@
             <p class="card-text"><strong>Precio:</strong> $${preciosServicios[cita.servicio]?.toLocaleString() || 'N/A'}</p>
             <p class="card-text"><strong>Mensaje:</strong> ${cita.mensaje || 'Sin mensaje adicional'}</p>
             <p class="card-text"><strong>Hora:</strong> ${cita.hora}</p>
+            <button class="btn btn-danger mt-3 btn-eliminar-cita" data-id="${cita.fecha}-${cita.hora}-${cita.email}">Eliminar</button>
           </div>
         </div>
       `;
 
                 contenedor.appendChild(card);
             });
+            // Delegar evento a los botones una vez cargados
+            contenedor.addEventListener('click', function (e) {
+                if (e.target.classList.contains('btn-eliminar-cita')) {
+                    const id = e.target.getAttribute('data-id');
+
+                    // Confirmación con SweetAlert
+                    Swal.fire({
+                        title: "¿Estás seguro?",
+                        text: "Esta acción eliminará tu cita",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Sí, eliminar",
+                        cancelButtonText: "Cancelar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Eliminar cita del arreglo
+                            const nuevasCitas = todasLasCitas.filter(cita => {
+                                const citaId = `${cita.fecha}-${cita.hora}-${cita.email}`;
+                                return citaId !== id;
+                            });
+
+                            
+                            localStorage.setItem("citasAgendadas", JSON.stringify(nuevasCitas));
+
+                            // Recargar página
+                            Swal.fire("Eliminado", "La cita ha sido eliminada", "success")
+                                .then(() => location.reload());
+                        }
+                    });
+                }
+            });
+
         });
     </script>
 

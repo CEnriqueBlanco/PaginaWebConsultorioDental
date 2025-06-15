@@ -19,6 +19,8 @@
     <link href="css/owl.carousel.min.css" rel="stylesheet">
     <link href="css/owl.theme.default.min.css" rel="stylesheet">
     <link href="css/templatemo-medic-care.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+
 </head>
 
 <body id="top">
@@ -91,6 +93,8 @@
                                             <option value="Resinas Estéticas">Resinas Estéticas</option>
                                             <option value="Prótesis Dentales">Prótesis Dentales</option>
                                         </select>
+                                        <small id="info-dias" class="text-muted mt-1 ms-1 d-block"></small>
+
                                     </div>
                                     <div class="col-lg-6 col-12">
                                         <label class="form-label"></label>
@@ -153,13 +157,14 @@
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/scrollspy.min.js"></script>
     <script src="js/custom.js"></script>
+    <script src="js/nav.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
 
     <script>
         emailjs.init("1asuRmlqgPwQ1OAgz");
-    
+
         const preciosServicios = {
             "limpieza dental": 500,
             "blanqueamiento": 1200,
@@ -168,7 +173,7 @@
             "resinas estéticas": 650,
             "prótesis dentales": 3500
         };
-    
+
         const horariosServicios = {
             "Limpieza Dental": [{ dias: [1, 2, 3, 4, 5], inicio: "09:00", fin: "18:00" }],
             "Blanqueamiento": [{ dias: [1, 2, 3, 4, 5, 6], inicio: "10:00", fin: "17:00" }],
@@ -177,21 +182,21 @@
             "Resinas Estéticas": [{ dias: [1, 2, 3, 4, 5], inicio: "09:00", fin: "16:00" }],
             "Prótesis Dentales": [{ dias: [1, 2, 3, 4, 5], inicio: "12:00", fin: "18:00" }]
         };
-    
+
         function actualizarPrecio(servicioSeleccionado) {
             const precioInput = document.getElementById("precio");
             const servicio = servicioSeleccionado.toLowerCase();
             const precio = preciosServicios[servicio];
             precioInput.value = precio ? "$" + precio.toLocaleString() : "";
         }
-    
+
         function esHoraValida(horaSel, inicio, fin) {
             const selMin = horaSel[0] * 60 + horaSel[1];
             const iniMin = inicio[0] * 60 + inicio[1];
             const finMin = fin[0] * 60 + fin[1];
             return selMin >= iniMin && selMin < finMin;
         }
-    
+
         function enviarCorreoConfirmacion(cita) {
             emailjs.send("service_ot6ffgl", "template_g1imyft", {
                 nombre: cita.nombre,
@@ -217,13 +222,13 @@
                 });
             });
         }
-    
+
         document.addEventListener("DOMContentLoaded", () => {
             const sesion = JSON.parse(localStorage.getItem("sesionIniciada"));
             const params = new URLSearchParams(window.location.search);
             const servicioURL = params.get("servicio");
             const select = document.getElementById("servicio");
-    
+
             if (servicioURL && select) {
                 for (let i = 0; i < select.options.length; i++) {
                     if (select.options[i].value === servicioURL) {
@@ -232,18 +237,20 @@
                     }
                 }
                 actualizarPrecio(select.value);
+                mostrarDiasPermitidos(select.value);
             }
-    
+
             if (sesion?.tipo === "usuario") {
                 const emailInput = document.getElementById("email");
                 emailInput.value = sesion.email;
                 emailInput.disabled = true;
             }
-    
+
             document.getElementById("servicio").addEventListener("change", function () {
                 actualizarPrecio(this.value);
+                mostrarDiasPermitidos(this.value);
             });
-    
+
             document.getElementById("btn-agendar").addEventListener("click", function () {
                 const nombre = document.getElementById("name").value.trim();
                 const telefono = document.getElementById("phone").value.trim();
@@ -253,11 +260,11 @@
                 const servicio = document.getElementById("servicio").value;
                 const precio = document.getElementById("precio").value;
                 const sesion = JSON.parse(localStorage.getItem("sesionIniciada"));
-    
+
                 const email = (sesion?.tipo === "usuario")
                     ? sesion.email
                     : document.getElementById("email").value.trim();
-    
+
                 if (!nombre || !email || !fecha || !hora || !servicio) {
                     Swal.fire({
                         icon: 'warning',
@@ -266,12 +273,13 @@
                     });
                     return;
                 }
-    
+
                 const fechaObj = new Date(fecha + "T00:00:00");
                 const dia = fechaObj.getDay();
                 const horarios = horariosServicios[servicio];
+                console.log(servicio, horarios)
                 const horariosValidos = horarios?.filter(h => h.dias.includes(dia)) || [];
-    
+
                 if (horariosValidos.length === 0) {
                     Swal.fire({
                         icon: 'error',
@@ -280,12 +288,12 @@
                     });
                     return;
                 }
-    
+
                 const horario = horariosValidos[0];
                 const horaSeleccionada = hora.split(':').map(Number);
                 const horaInicio = horario.inicio.split(':').map(Number);
                 const horaFin = horario.fin.split(':').map(Number);
-    
+
                 if (!esHoraValida(horaSeleccionada, horaInicio, horaFin)) {
                     Swal.fire({
                         icon: 'error',
@@ -294,20 +302,40 @@
                     });
                     return;
                 }
-    
+
                 const nuevaCita = { nombre, email, telefono, fecha, hora, mensaje, servicio, precio };
                 const citas = JSON.parse(localStorage.getItem("citasAgendadas")) || [];
                 citas.push(nuevaCita);
                 localStorage.setItem("citasAgendadas", JSON.stringify(citas));
-    
+
                 enviarCorreoConfirmacion(nuevaCita);
                 document.getElementById("form-cita").reset();
-    
+
                 if (sesion?.tipo === "usuario") {
                     document.getElementById("email").value = sesion.email;
                 }
             });
         });
+        function mostrarDiasPermitidos(servicio) {
+            const infoDias = document.getElementById("info-dias");
+            const horarios = horariosServicios[servicio];
+            if (!horarios) {
+                infoDias.textContent = "";
+                return;
+            }
+
+            const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+
+            const diasTexto = horarios
+                .map(h => {
+                    const nombresDias = h.dias.map(d => diasSemana[d]).join(", ");
+                    return `${nombresDias} de ${h.inicio} a ${h.fin}`;
+                })
+                .join(" / ");
+
+            infoDias.textContent = `Disponible: ${diasTexto}`;
+        }
+
     </script>
 
 

@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
             bienvenida.classList.remove("d-none");
         }
 
-                // Agregar "Mis Citas" solo si es usuario (no admin)
+               
                 // Agregar "Mis Citas" solo si es usuario (no admin)
                 if (sesion.tipo === "usuario" && !document.getElementById("misCitasLink")) {
                     const misCitasLi = document.createElement("li");

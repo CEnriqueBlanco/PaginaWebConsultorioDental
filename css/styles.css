@@ -29,4 +29,13 @@
     background-color: #0d6efd;
     color: #fff;
   }
-  
+ 
+  .nav-link.active-link {
+    background-color: #000 !important;
+    color: #fff !important;
+    border-radius: 0.4rem;
+    padding: 0.5rem 1rem;
+    margin: 0 0.25rem; /* separación entre botones */
+    font-weight: 600;
+    box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
+    }
